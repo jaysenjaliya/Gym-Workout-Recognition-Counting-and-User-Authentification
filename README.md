@@ -89,15 +89,6 @@ The **RecGym** dataset is a large-scale gym workout recognition benchmark:
 | `G_x`, `G_y`, `G_z` | Gyroscope (3-axis) |
 | `C_1` | Human Body Capacitance |
 
-### Download
-
-📥 **Download the dataset from Kaggle:**
-https://www.kaggle.com/datasets/zhaxidelebsz/10-gym-exercises-with-615-abstracted-features
-
-📄 **Dataset homepage:**
-https://zhaxidele.github.io/RecGym/
-
-> **Note:** Place the downloaded `RecGym.csv` file in the project root directory.
 
 ---
 
@@ -128,10 +119,6 @@ https://zhaxidele.github.io/RecGym/
    ```bash
    pip install -r requirements.txt
    ```
-
-4. **Download the dataset:**
-   - Visit the [Kaggle dataset page](https://www.kaggle.com/datasets/zhaxidelebsz/10-gym-exercises-with-615-abstracted-features)
-   - Download `RecGym.csv` and place it in the project root
 
 ---
 
@@ -165,23 +152,6 @@ The notebook provides a self-contained, step-by-step walkthrough:
 ### Configuration
 
 Key hyperparameters in `main_TrainTest.py`:
-
-```python
-# Dataset configuration
-dataset = "Gym_Cap"           # Dataset name
-n_sub = 10                    # Number of subjects
-n_classes = 12                # Number of activity classes
-in_samples = 80               # Window size (time-steps)
-
-# Training configuration
-batch_size = 256
-epochs = 1000
-lr = 0.0001
-n_train = 3                   # Training runs per subject
-
-# Sensor mode: "combine" | "imu" | "cap"
-sensor = "cap"                # Choose sensor configuration
-```
 
 ---
 
