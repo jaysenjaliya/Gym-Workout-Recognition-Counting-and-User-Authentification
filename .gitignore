@@ -1,0 +1,35 @@
+# Dataset (too large for Git)
+RecGym.csv
+*.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# LaTeX build artifacts
+presentation/*.aux
+presentation/*.log
+presentation/*.nav
+presentation/*.out
+presentation/*.snm
+presentation/*.toc
+
+# Saved model weights
+results/saved models/
+*.h5
+*.npz
+
+# Temporary
+*.tmp
+*.bak
+
