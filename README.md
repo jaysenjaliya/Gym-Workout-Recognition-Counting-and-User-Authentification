@@ -1,180 +1,143 @@
-﻿# Gym-Workout-Recognition-Counting-and-User-Authentification
-<p align="center">
-  <h1 align="center">🏋️ Gym Workout Recognition, Counting & User Authentication</h1>
-  <p align="center">
-    <em>Hybrid CNN-Dilated Self-Attention Model using Inertial & Body-Area Electrostatic Sensing</em>
-  </p>
-  <p align="center">
-    <a href="#features"><img src="https://img.shields.io/badge/Activities-12_Classes-00A896?style=for-the-badge" alt="12 Classes"></a>
-    <a href="#tech-stack"><img src="https://img.shields.io/badge/Framework-TensorFlow_2.x-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white" alt="TensorFlow"></a>
-    <a href="#dataset"><img src="https://img.shields.io/badge/Dataset-RecGym-4285F4?style=for-the-badge" alt="RecGym"></a>
-    <a href="#evaluation"><img src="https://img.shields.io/badge/Evaluation-Cross_User-8B5CF6?style=for-the-badge" alt="Cross-User"></a>
-  </p>
-</p>
+# GymSense AI 🏋️
+
+**GymSense AI** is an end-to-end intelligent gym session analysis system powered by a Hybrid CNN-Dilated Self-Attention deep learning model. It processes wearable sensor data (accelerometer, gyroscope, and body capacitance) from gym sessions to produce activity timelines, rep counts, workout quality metrics, personalised AI coaching, and downloadable PDF reports.
+
+Built on the **RecGym dataset** (10 subjects, 12 exercise classes, ~50 hours of annotated data) and designed to run on **Lightning AI** with an NVIDIA RTX 6000 GPU.
 
 ---
 
-## 📖 Project Overview
+## 🚀 Quick Start
 
-This project implements a **deep learning-based system** for automatic recognition and classification of **12 gym workout activities** using multi-modal wearable sensor data. The system leverages a **Hybrid CNN-Dilated Self-Attention** architecture that fuses **Inertial Measurement Unit (IMU)** signals with a novel **Human Body Capacitance (HBC)** sensing modality.
-
-### 🔬 Key Innovation
-
-Unlike traditional HAR systems that rely solely on accelerometer/gyroscope data, this project introduces **body-area electrostatic sensing (capacitance)** as a complementary modality. The dual-branch CNN architecture processes IMU and capacitance signals separately before fusing them, enabling the model to capture richer activity patterns.
-
-### 📊 Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    Input: Raw Sensor Data                       │
-│              (Ax, Ay, Az, Gx, Gy, Gz, C₁)                     │
-├──────────────────────┬──────────────────────────────────────────┤
-│   IMU Branch (6ch)   │   Capacitance Branch (1ch)              │
-│   ┌──────────────┐   │   ┌──────────────┐                     │
-│   │ Conv2D + LN  │   │   │ Conv2D + LN  │                     │
-│   │ DepthwiseConv│   │   │ DepthwiseConv│                     │
-│   │ Conv2D + LN  │   │   │ Conv2D + LN  │                     │
-│   └──────┬───────┘   │   └──────┬───────┘                     │
-├──────────┴───────────┴──────────┴──────────────────────────────┤
-│                    Concatenate (Post-Fusion)                    │
-├────────────────────────────────────────────────────────────────┤
-│              Sliding Window (n_windows=4)                       │
-│   ┌──────────────────────────────────────────────┐             │
-│   │  Multi-Head Self-Attention (4 heads, d=8)    │             │
-│   │  ↓                                           │             │
-│   │  Dilated TCN (dilation rates: 1, 2)          │             │
-│   │  ↓                                           │             │
-│   │  Dense → Activity Class                      │             │
-│   └──────────────────────────────────────────────┘             │
-│              Average Predictions Across Windows                 │
-├────────────────────────────────────────────────────────────────┤
-│                    Softmax → 12 Classes                         │
-└────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## ✨ Features
-
-- **12-Class Activity Recognition** — Adductor, Arm Curl, Bench Press, Leg Curl, Leg Press, Null, Riding, Rope Skipping, Running, Squat, Stair Climber, Walking
-- **Multi-Modal Sensor Fusion** — Combines 6-axis IMU (accelerometer + gyroscope) with body capacitance signals
-- **Hybrid Deep Learning Architecture** — CNN for local feature extraction + Multi-Head Self-Attention for temporal dependencies + Dilated TCN for multi-scale patterns
-- **Cross-User Evaluation** — Leave-One-Subject-Out (LOSO) cross-validation for robust generalization assessment
-- **Class-Weighted Training** — Handles class imbalance through per-class sample weighting
-- **Multiple Sensor Configurations** — Supports IMU-only, capacitance-only, and combined modes
-- **Multiple Body Positions** — Data from wrist, leg, and pocket sensor placements
-
----
-
-## 📦 Dataset
-
-### RecGym Dataset
-
-The **RecGym** dataset is a large-scale gym workout recognition benchmark:
-
-| Property | Value |
-|----------|-------|
-| **Subjects** | 10 volunteers |
-| **Sessions** | 5 per subject |
-| **Activities** | 12 classes (11 exercises + Null) |
-| **Sensor Positions** | Wrist, Leg, Pocket |
-| **Sampling Rate** | 20 Hz |
-| **Window Size** | 80 time-steps (4 seconds) |
-
-### Sensor Channels
-
-| Channel | Description |
-|---------|-------------|
-| `A_x`, `A_y`, `A_z` | Accelerometer (3-axis) |
-| `G_x`, `G_y`, `G_z` | Gyroscope (3-axis) |
-| `C_1` | Human Body Capacitance |
-
-
----
-
-## 🚀 Setup Instructions
-
-### Prerequisites
-
-- Python 3.8 or higher
-- pip package manager
-- (Optional) NVIDIA GPU with CUDA support for accelerated training
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/jaysenjaliya/Gym-Workout-Recognition-Counting-and-User-Authentification.git
-   cd Gym-Workout-Recognition-Counting-and-User-Authentification
-   ```
-
-2. **Create a virtual environment (recommended):**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate       # Linux/macOS
-   venv\Scripts\activate          # Windows
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
----
-
-## 💻 Usage
-
-### Option 1: Run the Full Training Pipeline
+### 1. Install Dependencies
 
 ```bash
-python main_TrainTest.py
+pip install -r requirements.txt
+```
+
+### 2. Set Environment Variables
+
+```bash
+cp .env.example .env
+# Edit .env and set your GEMINI_API_KEY (free from https://aistudio.google.com/apikey)
+export GEMINI_API_KEY=AIzaSyBFHU2XNaofboeDfuwtGvd-dRpHegd-2OE
+```
+
+### 3. Place Dataset
+
+Place `RecGym.csv` in the project root directory.
+
+### 4. Train the Model
+
+```bash
+python train.py --data-path RecGym.csv --test-user 10 --sensor combine --epochs 150
 ```
 
 This will:
-- Load the RecGym dataset
-- Train the model using LOSO cross-validation
-- Save best model weights per subject
-- Generate confusion matrices and performance logs
+- Train the Hybrid CNN-Dilated Self-Attention model using LOUO cross-validation
+- Save the trained model to `models/best_model.keras`
+- Save the scaler and label encoder to `models/`
+- Generate confusion matrix and learning curves in `results/`
+- Print accuracy, macro F1, and Cohen's kappa metrics
 
-### Option 2: Use the Jupyter Notebook
+**Expected results (from paper):** ~94.4% accuracy at wrist position, combined sensor mode.
+
+### 5. Run the Backend
 
 ```bash
-jupyter notebook notebooks/Hybrid_CNN_Dilated_SelfAttention.ipynb
+uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
-The notebook provides a self-contained, step-by-step walkthrough:
-1. **Imports & Setup** — Load all dependencies
-2. **Data Preprocessing** — Load, filter, window, and normalize data
-3. **Model Definition** — Build the Hybrid CNN-Dilated Self-Attention model
-4. **Cross-User Training** — Train on User 1, test on User 2 (and vice versa)
-5. **Evaluation** — Accuracy, Macro F1, Cohen's Kappa, confusion matrices
+### 6. Run the Frontend (Development)
 
-### Configuration
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-Key hyperparameters in `main_TrainTest.py`:
+### 7. Build & Deploy (Production)
+
+```bash
+cd frontend
+npm run build
+```
+
+The built frontend is served automatically by the FastAPI backend from `frontend/dist/`. Just run the backend and access it at `http://localhost:8000`.
 
 ---
 
-## 📈 Evaluation
+## 📖 How to Use
 
-### Cross-User Protocol
+1. Open the web interface at `http://localhost:3000` (dev) or `http://localhost:8000` (production)
+2. Upload any wrist-position sensor session CSV file
+3. Select a coaching focus (General, Form, Progressive Overload, or Recovery)
+4. Click **Analyse Session**
+5. View your results: activity timeline, exercise breakdown, quality metrics, and AI coaching
+6. Download the PDF report
 
-The model is evaluated using **Leave-One-Subject-Out (LOSO)** cross-validation:
-- For each fold, one subject is held out as the test set
-- The remaining subjects are used for training
-- This tests **generalization to unseen users** — the most rigorous evaluation
+---
 
-### Metrics
+## 🏗️ Architecture
 
-| Metric | Description |
-|--------|-------------|
-| **Accuracy** | Overall classification accuracy |
-| **Macro F1-Score** | Unweighted mean of per-class F1 scores |
-| **Cohen's Kappa** | Agreement metric accounting for chance |
-| **Confusion Matrix** | Per-class prediction analysis |
+| Component | Technology |
+|---|---|
+| **DL Model** | Hybrid CNN-Dilated Self-Attention (TensorFlow/Keras) |
+| **Rep Counting** | FFT/IFFT smoothing + scipy peak detection (HBC + IMU fusion) |
+| **Quality Scoring** | Tempo consistency, fatigue detection, rest evaluation |
+| **AI Coaching** | Google Gemini 2.0 Flash (free tier) |
+| **PDF Reports** | WeasyPrint + Jinja2 HTML templates |
+| **Backend** | FastAPI + Uvicorn |
+| **Frontend** | React 18 + Vite + Tailwind CSS 3 + Plotly.js |
 
+---
 
+## 📁 Project Structure
 
-<p align="center">
-  <em>Built with ❤️ for fitness and deep learning</em>
-</p>
+```
+gymsense-ai/
+├── train.py                 # Training script (CLI)
+├── session_processor.py     # Full inference pipeline
+├── rep_counter.py           # Rep counting (HBC + IMU)
+├── quality_scorer.py        # Workout quality metrics
+├── report_builder.py        # PDF report generation
+├── llm_coach.py             # Gemini AI coaching
+├── backend/
+│   └── main.py              # FastAPI backend
+├── frontend/                # React + Vite + Tailwind
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── components/
+│   │   │   ├── UploadForm.jsx
+│   │   │   ├── ResultsDashboard.jsx
+│   │   │   ├── SummaryCards.jsx
+│   │   │   ├── TimelineChart.jsx
+│   │   │   ├── ExerciseCard.jsx
+│   │   │   ├── CoachingPanel.jsx
+│   │   │   └── DownloadButton.jsx
+│   │   └── api.js
+│   └── ...
+├── templates/
+│   └── report.html          # PDF template
+├── models/                  # Saved models (after training)
+├── results/                 # Training results
+├── sessions/                # Session JSONs
+├── reports/                 # Generated PDFs
+├── requirements.txt
+└── .env.example
+```
+
+---
+
+## 📊 Dataset: RecGym
+
+- **10 subjects**, 5 sessions each
+- **3 sensor positions**: wrist, leg, pocket (wrist only used)
+- **12 exercise classes**: Squat, BenchPress, LegPress, Adductor, LegCurl, ArmCurl, RopeSkipping, Running, Walking, StairClimber, Riding, Null
+- **Sensors**: 3-axis accelerometer, 3-axis gyroscope, HBC (Human Body Capacitance)
+- **Sampling rate**: 20 Hz
+
+---
+
+*GymSense AI — DA-IICT Course Project 2025–26*
+*Base paper: Hybrid CNN-Dilated Self-Attention for Gym Workout Recognition (RecGym Dataset)*
+# GymSense

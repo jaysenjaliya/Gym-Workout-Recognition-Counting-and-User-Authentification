@@ -1,35 +1,29 @@
-# Dataset (too large for Git)
-RecGym.csv
-*.csv
 
-# Python
-__pycache__/
+pycache/
 *.pyc
 *.pyo
-.ipynb_checkpoints/
+*.pyd
 
-# IDE
-.vscode/
-.idea/
 
-# OS
+venv/
+backend/venv/
+backend/.venv/
+
+
+.env
+.env.local
+.env.*.local
+
+
+frontend/node_modules/
+frontend/dist/
+
+
 .DS_Store
 Thumbs.db
 
-# LaTeX build artifacts
-presentation/*.aux
-presentation/*.log
-presentation/*.nav
-presentation/*.out
-presentation/*.snm
-presentation/*.toc
 
-# Saved model weights
-results/saved models/
-*.h5
-*.npz
+*.log
 
-# Temporary
-*.tmp
-*.bak
-
+.vscode/
+.idea/
